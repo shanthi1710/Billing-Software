@@ -9,7 +9,7 @@ export default function ManageItems() {
           <ItemForm/>
        </div>
        <div className='right-column'>
-          
+          <ItemList/>
        </div>
     </div>
   )
