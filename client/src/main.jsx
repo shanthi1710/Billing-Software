@@ -6,6 +6,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import { BrowserRouter } from "react-router-dom";
 import { AppContextProvider } from "./context/AppContext.jsx";
+import { Toaster } from "react-hot-toast";
+
 
 createRoot(document.getElementById("root")).render(
     <BrowserRouter>
