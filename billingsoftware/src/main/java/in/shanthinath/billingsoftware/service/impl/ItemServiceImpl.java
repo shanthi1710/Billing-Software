@@ -78,7 +78,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(String itemId) {
-        ItemEntity existingItem = itemRepository.findItemId(itemId)
+        ItemEntity existingItem = itemRepository.findByItemId(itemId)
                 .orElseThrow(() -> new RuntimeException("Item not found: "+itemId));
         //boolean isFileDelete = fileUploadService.deleteFile(existingItem.getImgUrl());
         String imgUrl = existingItem.getImgUrl();
