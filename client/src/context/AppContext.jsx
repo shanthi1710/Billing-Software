@@ -7,7 +7,7 @@ export const AppContext = createContext(null);
 export const AppContextProvider = (props) => {
 
     const [categories, setCategories] = useState([]);
-    //const [itemsData, setItemsData] = useState([]);
+    const [itemsData, setItemsData] = useState([]);
     const [auth, setAuth] = useState({token: null, role: null});
     //const [cartItems, setCartItems] = useState([]);
 
@@ -59,8 +59,8 @@ export const AppContextProvider = (props) => {
         setCategories,
         auth,
         setAuthData,
-        // itemsData,
-        // setItemsData,
+        itemsData,
+        setItemsData,
         // addToCart,
         // cartItems,
         // removeFromCart,
