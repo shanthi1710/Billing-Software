@@ -32,4 +32,5 @@ public class OrderController {
     public List<OrderResponse> getLatestOrders() {
         return orderService.getLatestOrders();
     }
+
 }
