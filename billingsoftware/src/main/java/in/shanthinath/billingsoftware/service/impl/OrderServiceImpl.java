@@ -140,6 +140,24 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
+    private static final String[] MONTH_NAMES = {
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+    };
+
+    @Override
+    public List<MonthlySales> getMonthlySales() {
+        List<Object[]> rawData = orderEntityRepository.getMonthlySalesData();
+        return rawData.stream()
+                .map(row -> {
+                    int monthIndex = ((Integer) row[0]) - 1;
+                    String monthName = MONTH_NAMES[monthIndex];
+                    Double total = ((Number) row[1]).doubleValue();
+                    return new MonthlySales(monthName, total);
+                })
+                .collect(Collectors.toList());
+    }
+
     private boolean verifyRazorpaySignature(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature) {
         return true;
     }

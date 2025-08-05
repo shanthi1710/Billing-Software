@@ -1,6 +1,7 @@
 package in.shanthinath.billingsoftware.controller;
 
 import in.shanthinath.billingsoftware.io.DashboardResponse;
+import in.shanthinath.billingsoftware.io.MonthlySales;
 import in.shanthinath.billingsoftware.io.OrderResponse;
 import in.shanthinath.billingsoftware.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,11 @@ public class DashboardController {
                 todayOrderCount != null ? todayOrderCount : 0,
                 recentOrders
         );
+    }
+
+    @GetMapping("/monthly-sales")
+    public List<MonthlySales> getMonthlySales() {
+        return orderService.getMonthlySales();
     }
 }
 

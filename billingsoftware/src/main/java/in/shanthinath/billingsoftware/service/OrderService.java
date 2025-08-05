@@ -1,5 +1,6 @@
 package in.shanthinath.billingsoftware.service;
 
+import in.shanthinath.billingsoftware.io.MonthlySales;
 import in.shanthinath.billingsoftware.io.OrderRequest;
 import in.shanthinath.billingsoftware.io.OrderResponse;
 import in.shanthinath.billingsoftware.io.PaymentVerificationRequest;
@@ -23,4 +24,6 @@ public interface OrderService {
     Long countByOrderDate(LocalDate date);
 
     List<OrderResponse> findRecentOrders();
+
+    List<MonthlySales> getMonthlySales();
 }

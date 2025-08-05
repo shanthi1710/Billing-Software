@@ -1,6 +1,7 @@
 package in.shanthinath.billingsoftware.repository;
 
 import in.shanthinath.billingsoftware.entity.OrderEntity;
+import in.shanthinath.billingsoftware.io.MonthlySales;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,10 @@ public interface OrderEntityRepository extends JpaRepository<OrderEntity, Long> 
 
     @Query("SELECT o FROM OrderEntity o ORDER BY o.createdAt DESC")
     List<OrderEntity> findRecentOrders(Pageable pageable);
+
+    @Query("SELECT FUNCTION('MONTH', o.createdAt) as month, SUM(o.grandTotal) as totalSales " +
+            "FROM OrderEntity o " +
+            "GROUP BY FUNCTION('MONTH', o.createdAt) " +
+            "ORDER BY FUNCTION('MONTH', o.createdAt)")
+    List<Object[]> getMonthlySalesData();
 }
