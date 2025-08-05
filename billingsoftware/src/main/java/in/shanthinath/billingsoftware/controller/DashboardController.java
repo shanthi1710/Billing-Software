@@ -3,10 +3,12 @@ package in.shanthinath.billingsoftware.controller;
 import in.shanthinath.billingsoftware.io.DashboardResponse;
 import in.shanthinath.billingsoftware.io.MonthlySales;
 import in.shanthinath.billingsoftware.io.OrderResponse;
+import in.shanthinath.billingsoftware.io.WeeklySales;
 import in.shanthinath.billingsoftware.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -33,8 +35,13 @@ public class DashboardController {
     }
 
     @GetMapping("/monthly-sales")
-    public List<MonthlySales> getMonthlySales() {
-        return orderService.getMonthlySales();
+    public List<MonthlySales> getMonthlySales(@RequestParam int year) {
+        return orderService.getMonthlySales(year);
+    }
+
+    @GetMapping("/weekly-sales")
+    public List<WeeklySales> getWeeklySales(@RequestParam int year) {
+        return orderService.getWeeklySales(year);
     }
 }
 

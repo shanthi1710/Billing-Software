@@ -1,6 +1,7 @@
+
 import './Dashboard.css';
 import { useEffect, useState } from "react";
-import { fetchDashboardData, fetchMonthlySalesData } from "../../Service/Dashboard.js";
+import { fetchDashboardData, fetchMonthlySalesData, fetchWeeklySalesData } from "../../Service/Dashboard.js";
 import toast from "react-hot-toast";
 import { Bar } from "react-chartjs-2";
 import {
@@ -16,8 +17,11 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const Dashboard = () => {
     const [data, setData] = useState(null);
-    const [monthlySales, setMonthlySales] = useState([]);
+    const [salesData, setSalesData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [viewMode, setViewMode] = useState('monthly'); // 'monthly' or 'weekly'
+    const [year, setYear] = useState(new Date().getFullYear());
+    const [availableYears, setAvailableYears] = useState([]);
 
     useEffect(() => {
         const loadData = async () => {
@@ -25,8 +29,13 @@ const Dashboard = () => {
                 const response = await fetchDashboardData();
                 setData(response.data);
 
-                const monthlySalesResponse = await fetchMonthlySalesData();
-                setMonthlySales(monthlySalesResponse.data);
+                // Fetch available years from your backend (you'll need to implement this)
+                // const yearsResponse = await fetchAvailableYears();
+                // setAvailableYears(yearsResponse.data);
+                // For now, we'll just use recent years
+                setAvailableYears(Array.from({length: 5}, (_, i) => new Date().getFullYear() - i));
+
+                await loadSalesData();
             } catch (error) {
                 console.error(error);
                 toast.error("Unable to view the data");
@@ -37,6 +46,25 @@ const Dashboard = () => {
         loadData();
     }, []);
 
+    const loadSalesData = async () => {
+        try {
+            let response;
+            if (viewMode === 'monthly') {
+                response = await fetchMonthlySalesData(year);
+            } else {
+                response = await fetchWeeklySalesData(year);
+            }
+            setSalesData(response.data);
+        } catch (error) {
+            console.error(error);
+            toast.error("Unable to load sales data");
+        }
+    };
+
+    useEffect(() => {
+        loadSalesData();
+    }, [viewMode, year]);
+
     if (loading) {
         return <div className="loading">Loading dashboard...</div>;
     }
@@ -46,10 +74,10 @@ const Dashboard = () => {
     }
 
     const chartData = {
-        labels: monthlySales.map(item => item.monthName),
+        labels: salesData.map(item => item.monthName || item.weekName),
         datasets: [{
-            label: 'Monthly Sales (₹)',
-            data: monthlySales.map(item => item.totalSales),
+            label: viewMode === 'monthly' ? 'Monthly Sales (₹)' : 'Weekly Sales (₹)',
+            data: salesData.map(item => item.totalSales),
             backgroundColor: '#20c997',
             borderWidth: 1,
         }]
@@ -103,17 +131,42 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                   
-                  <div className="chart-card">
-                      <h3 className="chart-title">
-                          Monthly Sales Overview
-                      </h3>
-                      <div className="chart-container" style={{ height: '400px' }}>
-                          <Bar data={chartData} options={chartOptions} />
-                      </div>
-                  </div>
+                <div className="chart-card">
+                    <div className="chart-header">
+                        <h3 className="chart-title">
+                            Sales Overview
+                        </h3>
+                        <div className="chart-controls">
+                            <select 
+                                value={year} 
+                                onChange={(e) => setYear(parseInt(e.target.value))}
+                                className="year-select"
+                            >
+                                {availableYears.map(y => (
+                                    <option key={y} value={y}>{y}</option>
+                                ))}
+                            </select>
+                            <div className="view-toggle">
+                                <button
+                                    className={viewMode === 'monthly' ? 'active' : ''}
+                                    onClick={() => setViewMode('monthly')}
+                                >
+                                    Monthly
+                                </button>
+                                <button
+                                    className={viewMode === 'weekly' ? 'active' : ''}
+                                    onClick={() => setViewMode('weekly')}
+                                >
+                                    Weekly
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="chart-container" style={{ height: '400px' }}>
+                        <Bar data={chartData} options={chartOptions} />
+                    </div>
+                </div>
 
-                 
                 <div className="recent-orders-card">
                     <h3 className="recent-orders-title">
                         <i className="bi bi-clock-history"></i>

@@ -27,7 +27,15 @@ public interface OrderEntityRepository extends JpaRepository<OrderEntity, Long> 
 
     @Query("SELECT FUNCTION('MONTH', o.createdAt) as month, SUM(o.grandTotal) as totalSales " +
             "FROM OrderEntity o " +
+            "WHERE FUNCTION('YEAR', o.createdAt) = :year " +
             "GROUP BY FUNCTION('MONTH', o.createdAt) " +
             "ORDER BY FUNCTION('MONTH', o.createdAt)")
-    List<Object[]> getMonthlySalesData();
+    List<Object[]> getMonthlySalesData(@Param("year") int year);
+
+    @Query("SELECT FUNCTION('WEEK', o.createdAt) as week, SUM(o.grandTotal) as totalSales " +
+            "FROM OrderEntity o " +
+            "WHERE FUNCTION('YEAR', o.createdAt) = :year " +
+            "GROUP BY FUNCTION('WEEK', o.createdAt) " +
+            "ORDER BY FUNCTION('WEEK', o.createdAt)")
+    List<Object[]> getWeeklySalesData(@Param("year") int year);
 }

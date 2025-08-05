@@ -1,9 +1,6 @@
 package in.shanthinath.billingsoftware.service;
 
-import in.shanthinath.billingsoftware.io.MonthlySales;
-import in.shanthinath.billingsoftware.io.OrderRequest;
-import in.shanthinath.billingsoftware.io.OrderResponse;
-import in.shanthinath.billingsoftware.io.PaymentVerificationRequest;
+import in.shanthinath.billingsoftware.io.*;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
@@ -25,5 +22,7 @@ public interface OrderService {
 
     List<OrderResponse> findRecentOrders();
 
-    List<MonthlySales> getMonthlySales();
+    List<MonthlySales> getMonthlySales(int year);
+
+    List<WeeklySales> getWeeklySales(int year);
 }

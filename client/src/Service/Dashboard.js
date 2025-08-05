@@ -9,11 +9,18 @@ export const fetchDashboardData = async () => {
         }
     });
 }
-
-export const fetchMonthlySalesData = async () => {
-    return await axios.get(`${BASE_URL}/dashboard/monthly-sales`, {
+export const fetchMonthlySalesData = async(year)=>{
+    return await axios.get(`${BASE_URL}/dashboard/monthly-sales?year=${year}`, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem("token")}`
-        }
-    });
+        }});
+
 }
+export const fetchWeeklySalesData = async (year) => {
+    return await axios.get(`${BASE_URL}/dashboard/weekly-sales?year=${year}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+        }});
+    }
+
+
