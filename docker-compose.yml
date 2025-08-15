@@ -1,9 +1,27 @@
 version: '3.8'
 
 services:
-  mysql:
+  backend:
+    build: ./billingsoftware
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:mysql://db:3306/billing_app
+      - DB_USERNAME=root
+      - DB_PASSWORD=Pavan@1710
+      - SPRING_JPA_DDL_AUTO=update
+    depends_on:
+      - db
+
+  frontend:
+    build: ./client
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  db:
     image: mysql:8.0
-    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: Pavan@1710
       MYSQL_DATABASE: billing_app
@@ -11,49 +29,6 @@ services:
       - mysql_data:/var/lib/mysql
     ports:
       - "3307:3306"
-    networks:
-      - app-network
-
-  billingsoftware:
-    build:
-      context: ./billingsoftware
-      dockerfile: Dockerfile
-    container_name: billingsoftware
-    depends_on:
-      - mysql
-    environment:
-      DB_URL: jdbc:mysql://mysql:3306/billing_app
-      DB_USERNAME: root
-      DB_PASSWORD: Pavan@1710
-      SPRING_JPA_DDL_AUTO: update
-      SERVER_CONTEXT_PATH: /api/v1.0
-      AWS_ACCESS_KEY: AKIA2VQVRXHGQKN7N6TL
-      AWS_SECRET_KEY: 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
-      AWS_REGION: ap-south-1
-      BUCKET_NAME: billing-software-shanthi1710
-      JWT_TOKEN: qwertyuiopasdfghjklzxcvbnm
-      RAZORPAY_KEY: rzp_test_kJJh11RNMT75um
-      RAZORPAY_SECRET: isRVhnpDuWLTR0ofFblaVwob
-    ports:
-      - "8080:8080"
-    networks:
-      - app-network
-
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    container_name: client
-    depends_on:
-      - billingsoftware
-    ports:
-      - "3000:80"
-    networks:
-      - app-network
 
 volumes:
   mysql_data:
-
-networks:
-  app-network:
-    driver: bridge
