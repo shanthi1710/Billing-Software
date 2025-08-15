@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  backend:
+    image: shanthi1710/billing-software-backend:latest  
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:mysql://db:3306/billing_app
+      - DB_USERNAME=root
+      - DB_PASSWORD=Pavan@1710
+      - SPRING_JPA_DDL_AUTO=update
+    depends_on:
+      - db
+
+  frontend:
+    image: shanthi1710/billing-software-frontend:latest 
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: Pavan@1710
+      MYSQL_DATABASE: billing_app
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+
+volumes:
+  mysql_data:
