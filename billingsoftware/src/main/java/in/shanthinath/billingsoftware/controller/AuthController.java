@@ -48,7 +48,7 @@ public class AuthController {
         }catch (DisabledException e) {
             throw new Exception("User disabled");
         }catch (BadCredentialsException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or password is incorrect1233");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email or password is incorrect");
         }
     }
 

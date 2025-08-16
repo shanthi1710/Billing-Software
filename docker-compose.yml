@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    build: ./billingsoftware
+    image: shanthi1710/billing-software-backend:latest  
     ports:
       - "8080:8080"
     environment:
@@ -17,7 +17,7 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./client
+    image: shanthi1710/billing-software-frontend:latest 
     ports:
       - "80:80"
     depends_on:
